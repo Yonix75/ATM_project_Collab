@@ -1,39 +1,176 @@
 from datetime import *
 
-
-class Bank:
-    def init(self):
-        pass
-
-
 class Account:
-    def init(self, id, name ,pin ,balance, is_activated, transaction ):
-        self.id = id
+    def __init__(self,id,name,pin,balance,): 
+        
+        self.id = int(id)
         self.name=name
         self.balance=balance
         self.pin = pin
-        self.is_activated = is_activated
-        self.transaction = transaction
+        self.is_activated = True
+        self.transactions = [  ]
+        
+    def __str__(self):
+        return (f"Account ID: {self.id} User name: {self.name}, Balance: {self.balance}, Pin: {self.pin}, Account active: {self.is_activated}, Transaction history: {self.transactions}")
 
-    def auth(self):
-        id_client = (input("Enter your account ID: "))   # קבלת מזהה מהמשתמש
-        pin_client = (input("enter your PIN: "))       # קבלת סיסמא מהמשתמש
+    def is_pin_correct(self):
+        id_client = (input("Enter your account ID: ").strip())   # קבלת מזהה מהמשתמש
+        pin_client = (input("enter your PIN: ").strip())       # קבלת סיסמא מהמשתמש
 
         if id_client == self.id and pin_client == self.pin:
             self.is_activated = True
+           
             print("correct")
-            return self.id
+            return self.is_activated
 
         else:
             print("is Incorrect")
             self.is_activated = False
+            
+    
+            
+    def newTransaction(self,transaction_type,amount):
+      newTransaction = {
+          "type": transaction_type,
+          "amount": float(amount),
+          "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+      }
+      self.transactions.append(newTransaction)         
+            
+    
+    
+    def show_Transaction(self):
+        print(self.transactions)
+    
+    def transfereTo(self):
+        
+        target_account_id = int(input("Enter the ID of the account you would like to transfer to: ").strip())
+        amount = int(input("Enter the amount you would like to tranfer: ").strip())
+        target_account=None
+        for i in my_bank.accounts:
+            if i.id == target_account_id:
+                target_account = i 
+                break
+        else:
+            print("Targeted account not found")
+                
+        if not self.is_activated: 
+            print("Account is blocked")
+            return
+
+        if not target_account.is_activated:
+            print("Target account is blocked")
+            return
+
+        if amount <= 0:
+            print("Invalid amount")
+            return
+
+        if amount > self.balance:
+            print("Insufficient funds")
+            return
+        
+        self.balance -= amount
+        target_account.balance += amount
+
+        self.newTransaction("Transfer sent", amount) #! אולי כדי להכניס מי העביר 
+        target_account.newTransaction("Transfer received", amount) #! כנל להכניס מי שלח את הכסף
+
+        print(f"Transferred {amount} to account {target_account.name}")
+        print(f"Your new balance: {self.balance}")
+            
+        
+         
+        
+            
+    def deposit(self):
+        amount = int(input("How many do you want to deposit: ").strip())
+        self.balance+=amount
+        print(f"new Balance in your Account is {self.balance}")
+        self.newTransaction("deposite",amount)
+               
+    def withdraw(self):
+    
+     if self.is_activated:
+        amount = float(input("Please type the amount you would like to withdraw: ").strip())
+        if amount > self.balance:
+            print("You are poor")
+        else: 
+            self.balance -= amount
+            print(f"your new balance is {self.balance}")
+            self.newTransaction("withdraw",amount)
+     else:
+        print("Wrong PIN, goodbye")
+        exit() 
+                      
+    def balanceaccount(self):
+        print(self.balance)
+        
+         
+         
+class Bank():
+    def __init__(self, accounts, pinBoss):
+        self.accounts = accounts
+        self.pinBoss = pinBoss
+        self.nextCount_id = 1001 
+        
+    # def login(self):
+    #     self.auth()    
+        
+    def auth(self):
+        user_id = int(input("Enter your account ID: ").strip())
+        pin = (input("Enter your PIN: ").strip())
+    
+        for account in self.accounts:
+            if user_id == account.id and pin == account.pin:
+                print(f"Welcome {account.name}")
+                return account
+            
+        print("worng ID or PIN")
+            
+              
+        
+    def creatAccount(self):
+        name = input("What your name: ")
+        pin = input("Choose your PIN: ")
+        Account_id = self.nextCount_id
+        self.is_activated = True
+        self.nextCount_id +=1
+        new_Account = Account(Account_id, name, pin, 0 )
+        self.accounts.append(new_Account)
+        print("Account created successfully!")
+    
+    
+    
+    def account_finder(self):
+        id_to_finde = int(input("Enter the ID of the account you want to finde: ").strip())
+        account_found = None
+        
+        for account in self.accounts:
+            if account.id == id_to_finde:
+                print("Account found!: ")
+                account_found = account
+                print(account_found)
+            else:
+                print("account not found")
+        
+    
+    def show_all_accounts(self):
+        for account in self.accounts:
+            print(account)
+            
+        
 
 
+    
+acount1 =Account(1001,"niv", "123", 500)
+acount2 =Account(1002,"yoni", "123", 41500)
+acount3 =Account(1003,"dan", "123", 34500)
+# acount4 =Account(1004,"ron", "123", 4500)
 
-acount1 =Account("123","niv", "123", 500, False, [])
+my_bank = Bank([acount1,acount2,acount3],123)
+my_bank = Bank([],123)
 
-
-
-
-def addTransaction():
-    pass
+my_bank.creatAccount()
+my_bank.creatAccount()
+my_bank.show_all_accounts()
