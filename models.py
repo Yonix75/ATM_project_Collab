@@ -1,7 +1,8 @@
 from datetime import *
+from storage import *
 
 class Account:
-    def __init__(self,id,name,pin,balance,): 
+    def __init__(self,id,name,pin,balance): 
         
         self.id = int(id)
         self.name=name
@@ -9,6 +10,29 @@ class Account:
         self.pin = pin
         self.is_activated = True
         self.transactions = [  ]
+    
+    def to_dict(self):
+      return {
+        "id": self.id,
+        "name": self.name,
+        "pin": self.pin,
+        "balance": self.balance,
+        "is_activated": self.is_activated,
+        "transactions": self.transactions
+    }
+      
+    @classmethod
+    def from_dict(cls, data):
+     account = cls(
+        data["id"],
+        data["name"],
+        data["pin"],
+        data["balance"]
+    )
+     account.is_activated = data["is_activated"]
+     account.transactions = data["transactions"]
+     return account 
+      
         
     def __str__(self):
         return (f"Account ID: {self.id} User name: {self.name}, Balance: {self.balance}, Pin: {self.pin}, Account active: {self.is_activated}, Transaction history: {self.transactions}")
@@ -41,6 +65,9 @@ class Account:
     
     def show_Transaction(self):
         print(self.transactions)
+    
+    
+                
     
     def transfereTo():
         
@@ -89,7 +116,7 @@ class Account:
 
         user_account.newTransaction(f"Transfer sent to ID: {targetid} name: {targetname} ", amount) #! אולי כדי להכניס מי העביר 
         target_account.newTransaction(f"Transfer received to ID:{myId} name: {myName}", amount) #! כנל להכניס מי שלח את הכסף
-
+        save_data(my_bank)#saveeeee
         print(f"Transferred {amount} to account {target_account.name}")
         print(f"Your new balance: {user_account.balance}")
             
@@ -97,18 +124,22 @@ class Account:
          
         
             
-    def deposit():
-        user_account = my_bank.auth()
+    def deposit(self,amount):
         
-        if user_account:
-            amount = int(input("How much money you would like to deposit: ").strip())
+        #self.is_activated
+        
+        if self.is_activated:
+            #amount = int(input("How much money you would like to deposit: ").strip())
             if amount < 0:
+                self.label_amount.config(text="You cannot tpye negative numbers")
                 print("You cannot tpye negative numbers")
                 exit()
             else:
-                user_account.balance+=amount
-                print(f"new Balance in your Account is {user_account.balance}")
-                user_account.newTransaction("deposite",amount)
+                self.balance+=amount
+                print(f"The money has been deposited ! The new Balance in your Account is: {self.balance}₪")
+                self.newTransaction("deposite",amount)
+                save_data(my_bank)
+                return f"The money has been deposited ! \n The new Balance in your Account is: {self.balance}₪"
                
     def withdraw():
         user_account = my_bank.auth()
@@ -120,8 +151,10 @@ class Account:
                     print("You are poor")
                 else: 
                     user_account.balance -= amount
+                    
                     print(f"your new balance is {user_account.balance}")
                     user_account.newTransaction("withdraw",amount)
+                    save_data(my_bank)
             else:
                 print("Wrong PIN, goodbye")
                 exit() 
@@ -135,20 +168,26 @@ class Bank():
     def __init__(self, accounts, pinBoss):
         self.accounts = accounts
         self.pinBoss = pinBoss
-        self.nextCount_id = 1001 
+        self.nextCount_id = 1000 
         
-    # def login(self):
-    #     self.auth()    
+    def is_open(self):
+       
+        return self.is_activated
         
-    def auth(self):
-        user_id = int(input("Enter your account ID: ").strip())
-        pin = (input("Enter your PIN: ").strip())
+    def auth(self,user_id,pin):
+       # user_id = int(input("Enter your account ID: ").strip())
+        #pin = (input("Enter your PIN: ").strip())
         
         for account in self.accounts:
             if user_id == account.id and pin == account.pin:
-                print(f"Welcome {account.name}")
-                
-                return account
+                if user_id!=1000:
+                  print(f"Welcome {account.name}")
+                  self.is_activated = True
+                  return account
+                else:
+                  print(f"Welcome {account.name}") 
+                  return my_bank.directorLogin()
+                     
             
         print("worng ID or PIN")
     
@@ -164,9 +203,10 @@ class Bank():
         self.nextCount_id+=1            
         Account_id = self.nextCount_id
         self.is_activated = True
-        self.nextCount_id +=1
+    
         new_Account = Account(Account_id, name, pin, 0 )
         self.accounts.append(new_Account)
+        save_data(self)#save new account
         print("Account created successfully!")
     
     
@@ -186,29 +226,45 @@ class Bank():
         
     
     def show_all_accounts(self):
-        for account in self.accounts:
-            print(account)
+        load=load_data()
+        for account in load.accounts:
+          print(account)
             
+    def show_All_Transaction(self):
         
-
-
+        
+        for account in self.accounts:
+         print(f"Account ID: {account.id} | Name: {account.name}")
+        
+        if not account.transactions:
+            print("  No transactions found")
+        else:
+            for transaction in account.transactions:
+                print(f"  Type: {transaction['type']}")
+                print(f"  Amount: {transaction['amount']}")
+                print(f"  Date: {transaction['date']}")
+                print("  --------")
+            
     
-acount1 =Account(1001,"niv", "123", 500)
-acount2 =Account(1002,"yoni", "123", 41500)
-acount3 =Account(1003,"dan", "123", 34500)
-# acount4 =Account(1004,"ron", "123", 4500)
+    def directorLogin(self):
+        self.show_all_accounts()
+        
+        
+          
+           
+try:
+    my_bank = load_data()
+except FileNotFoundError:
+    my_bank = Bank([], "000")      
+    
 
-#my_bank = Bank([acount1,acount2,acount3],123)
-my_bank = Bank([acount1,acount2,acount3],123)
 
 
-
-#my_bank.creatAccount()
-#my_bank.creatAccount()
-#my_bank.show_all_accounts()
-#Account.deposit()
-#Account.withdraw()
-#Account.transfereTo()
-#my_bank.account_finder()
-#Account.deposit()
-# my_bank.accounts[0].deposit()
+if __name__ == "_main_":
+    
+    my_bank.show_all_accounts()
+    Account.withdraw()
+    my_bank.show_all_accounts()
+    Account.transfereTo()
+    
+    
