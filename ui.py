@@ -84,13 +84,13 @@ class ATMApp():
         self.label_amount.config(text=result)
         
         
-    def operationComplet(self):
-        self.clear_screen()
-        self.title_label = tk.Label(self.root,text="Operation Complet", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
-        self.title_label.pack(pady=50)#vertical title
-        self.label_account = tk.Label(self.root, text="")
-        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
-        self.back_button.pack(pady=20)
+    # def operationComplet(self):
+    #     self.clear_screen()
+    #     self.title_label = tk.Label(self.root,text="Operation Complet", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+    #     self.title_label.pack(pady=50)#vertical title
+    #     self.label_account = tk.Label(self.root, text="")
+    #     self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+    #     self.back_button.pack(pady=20)
    
     def get_Transaction(self):
       try:
@@ -105,9 +105,9 @@ class ATMApp():
       self.label_account.config(text=result)
       #self.operationComplet()
     
-    def get_Balance(self):
+    def get_History(self):
       self.show_balance_screen()
-      balance = self.current_account.balanceaccount()
+      balance = self.current_account.show_Transaction()
       self.label_account.config(text=balance)
       
       
@@ -158,10 +158,10 @@ class ATMApp():
         self.entry_PIN.pack(pady=5)
 
 
-        self.login_button = tk.Button(self.root, text="Login", width=15, command=self.get_enterys_valu)
+        self.login_button = tk.Button(self.root, text="Login", width=15, bg = "red",fg="#FFFFFF", command=self.get_enterys_valu)
         self.login_button.pack(pady=15)
 
-        self.admin_button = tk.Button(self.root, text="Admin", width=15, command=self.show_admin_login_screen)
+        self.admin_button = tk.Button(self.root, text="Admin", bg = "red", width=15, fg="#FFFFFF", command=self.show_admin_login_screen)
         self.admin_button.pack()
         
         
@@ -183,23 +183,23 @@ class ATMApp():
         self.blanace_label.place(x=560, y=50)
         
         #  כפתור הפקדה
-        self.deposit_button = tk.Button(self.root, text="Deposit", width=15,command=self.show_deposit_screen)
+        self.deposit_button = tk.Button(self.root, text="Deposit", bg = "red",fg="#FFFFFF", width=15,command=self.show_deposit_screen)
         self.deposit_button.place(x=40, y=150)
         
         # כפתור משיכה 
-        self.withdraw_button = tk.Button(self.root, text="Withdraw", width=15,command=self.show_withdraw_screen)
+        self.withdraw_button = tk.Button(self.root, text="Withdraw", bg = "red",fg="#FFFFFF", width=15,command=self.show_withdraw_screen)
         self.withdraw_button.place(x=40, y=250)
         
         # כפתור הצג עובר ושב
-        self.balance_button = tk.Button(self.root, text="Balance", width=15,command=self.get_Balance)
+        self.balance_button = tk.Button(self.root, text="History", bg = "red",fg="#FFFFFF", width=15,command=self.get_History)
         self.balance_button.place(x=560, y=150)
        
         # כפתור העברה
-        self.transfer_button = tk.Button(self.root, text="Transfer", width=15,command=self.show_Transfer_screen)
+        self.transfer_button = tk.Button(self.root, text="Transfer", bg = "red",fg="#FFFFFF", width=15,command=self.show_Transfer_screen)
         self.transfer_button.place(x=560, y=250)
         
         # כפתור יציאה 
-        self.back_button = tk.Button(self.root, text="Log out", width=15,command=self.show_login_screen)
+        self.back_button = tk.Button(self.root, text="Log out", bg = "red", width=15,command=self.show_login_screen)
         self.back_button.place(x=300, y=400)
 
     def show_admin_login_screen(self):
@@ -214,16 +214,16 @@ class ATMApp():
         self.entery_label = tk.Label(self.root,text="Enter your PIN", font=("Arial", 10, "bold"),bd=0,highlightthickness=0)
         self.entery_label.pack(pady=15)
         
-        self.entry_pin = tk.Entry(self.root, width=25)#entry input
+        self.entry_pin = tk.Entry(self.root, width=25, show="*")#entry input
         #ATMApp.get_entery_valu
         self.entry_pin.pack(pady=10)
         
         # כפתור אנטר
-        self.enter_button = tk.Button(self.root, text="Login", width=15, command=self.admin_login)
+        self.enter_button = tk.Button(self.root, text="Login", bg = "red", width=15, command=self.admin_login)
         self.enter_button.pack(pady=10)
         
         # כפתור יציאה 
-        self.back_button = tk.Button(self.root, text="back", width=15,command=self.show_login_screen)
+        self.back_button = tk.Button(self.root, text="back", bg = "red", width=15,command=self.show_login_screen)
         self.back_button.place(x=300, y=400)
         
     def show_admin_menu_screen(self):
@@ -233,22 +233,22 @@ class ATMApp():
         self.title_label.place(x=270, y=40)
         
         #   כפתור יצירת חשבון
-        self.creat_account_button = tk.Button(self.root, text="Create new account", width=15,command=self.show_account_creation_screen)
+        self.creat_account_button = tk.Button(self.root, text="Create new account", bg = "red", width=15,command=self.show_account_creation_screen)
         self.creat_account_button.place(x=40, y=150)
         
         # כפתור הצגת כל החשבונות 
-        self.show_accounts_button = tk.Button(self.root, text="All my accounts", width=15)
+        self.show_accounts_button = tk.Button(self.root, text="All my accounts", bg = "red", width=15,command=self.show_all_my_accounts_screen)
         self.show_accounts_button.place(x=40, y=250)
         
         # כפתור הצג חסימה שחרור 
-        self.block_account_button = tk.Button(self.root, text="Block / Release", width=15)
+        self.block_account_button = tk.Button(self.root, text="Block / Release", bg = "red", width=15)
         self.block_account_button.place(x=560, y=150)
        
     
         
         
         # כפתור יציאה 
-        self.back_button = tk.Button(self.root, text="Log out", width=15,command=self.show_login_screen)
+        self.back_button = tk.Button(self.root, text="Log out", bg = "red", width=15,command=self.show_login_screen)
         self.back_button.place(x=300, y=400)
 
     def show_deposit_screen(self):
@@ -262,9 +262,9 @@ class ATMApp():
         
         self.entry_amount = tk.Entry(self.root, width=25)#entry input
         self.entry_amount.pack(pady=5)
-        self.enter_button = tk.Button(self.root, text="Enter", width=15,command=self.get_deposit)
+        self.enter_button = tk.Button(self.root, text="Enter", bg = "red", width=15,command=self.get_deposit)
         self.enter_button.pack(pady=10)
-        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
 
     def show_withdraw_screen(self):
@@ -278,9 +278,9 @@ class ATMApp():
         
         self.entry_amount = tk.Entry(self.root, width=25)#entry input
         self.entry_amount.pack(pady=5)
-        self.enter_button = tk.Button(self.root, text="Enter", width=15,command=self.get_withdraw)
+        self.enter_button = tk.Button(self.root, text="Enter", bg = "red", width=15,command=self.get_withdraw)
         self.enter_button.pack(pady=10)
-        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
 
     def show_balance_screen(self):
@@ -292,7 +292,7 @@ class ATMApp():
         self.title_label.pack(pady=50)#vertical title
         self.label_account = tk.Label(self.root, text="")
         self.label_account.pack()
-        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
     
     
@@ -313,9 +313,9 @@ class ATMApp():
         self.entry_amount.pack(pady=5)
 
 
-        self.login_button = tk.Button(self.root, text="Enter", width=15, command=self.get_Transaction)
+        self.login_button = tk.Button(self.root, text="Enter", bg = "red", width=15, command=self.get_Transaction)
         self.login_button.pack(pady=10)
-        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
         
      
@@ -341,7 +341,7 @@ class ATMApp():
         self.entry_pinacc.place(x=430, y=190)
         
         # כפתור אנטר
-        self.enter_button = tk.Button(self.root, text="Creat Account!", width=15, command=self.get_create_acccount)
+        self.enter_button = tk.Button(self.root, text="Creat Account!", bg = "red", width=15, command=self.get_create_acccount)
         self.enter_button.place(x=300, y=270)
         
         # לייבל אישור ביצוע 
@@ -351,14 +351,42 @@ class ATMApp():
         
         
         # כפתור חזרה
-        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_admin_menu_screen)
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
         self.back_button.place(x=300, y=400)
         
         
-#creat windows
+    def show_all_my_accounts_screen(self):
+       
+        self.clear_screen()
+        canvas = tk.Canvas(root)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL, command=canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, )
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollable_frame = tk.Frame(canvas)
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+         
+        self.title_label = tk.Label(scrollable_frame, text="Bank Accounts:", font=("Arial", 15, "bold"),bd=0,highlightthickness=0, )#title center window
+        self.title_label.pack(pady=15, anchor="w")
+        
+        for account in my_bank.accounts:
+            txt = (f"ID: {account.id}  | UserName: {account.name} | Status is active: {account.is_activated}")
+            self.account_label = tk.Label(scrollable_frame,text=txt, font=("Arial", 13),bd=0,highlightthickness=0)#title center window
+            self.account_label.pack(pady=15)
+            
+        # כפתור חזרה    
+        # self.back_button = tk.Button(self.root, text="Back", width=15, command=self.show_admin_menu_screen)
+        # self.back_button.pack()
 
 
-import tkinter as tk
+
+
+
+
 
 root = tk.Tk()
 root.title("MAZE BANK")
@@ -376,7 +404,7 @@ app = ATMApp(main_frame, Bank=None)
 app.show_login_screen()
 
 
-# =================================================cursor
+# #=================================================cursor
 # cursor_image = tk.PhotoImage(file="cursor_transparent_32.png")
 # cursor_label = tk.Label(main_frame, image=cursor_image, bd=0, bg="white", highlightthickness=0)
 # cursor_label.place(x=0, y=0)

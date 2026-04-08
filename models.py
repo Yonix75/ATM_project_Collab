@@ -64,8 +64,13 @@ class Account:
     
     
     def show_Transaction(self):
-        print(self.transactions)
-    
+        result = " "
+        for transaction in self.transactions:
+          result += f"Type: {transaction['type']} | Amount: {transaction['amount']} | Date: {transaction['date']}\n"
+          
+        return result
+           # print(self.transactions)
+            # return f"{self.transactions}\n"
     
     
     
@@ -252,14 +257,14 @@ class Bank():
          print(f"Account ID: {account.id} | Name: {account.name}")
         
         if not account.transactions:
-            print("  No transactions found")
+            return f"  No transactions found"
         else:
             for transaction in account.transactions:
                 print(f"  Type: {transaction['type']}")
                 print(f"  Amount: {transaction['amount']}")
                 print(f"  Date: {transaction['date']}")
                 print("  --------")
-            
+                return f"""Type: {transaction['type']} | Amount: {transaction['amount']} | Date: {transaction['date']}\n"""
     
     def directorLogin(self):
         self.show_all_accounts()
