@@ -117,12 +117,12 @@ class Account:
         self.balance -= amount
         target_account.balance += amount
 
-        self.newTransaction(f"Transfer sent to ID: {target_account.id} name: {target_account.name} ", f"{amount}") #! אולי כדי להכניס מי העביר 
-        target_account.newTransaction(f"Transfer received to ID:{self.id} name: {self.name}", amount) #! כנל להכניס מי שלח את הכסף
+        self.newTransaction(f"Transfer sent to ID: {target_account.id} name: {target_account.name} ", f"{amount}") 
+        target_account.newTransaction(f"Transfer received to ID:{self.id} name: {self.name}", amount) 
         save_data(my_bank)#saveeeee
         print(f"Transferred {amount} to account {target_account.name}")
         print(f"Your new balance: {self.balance}")
-        return f"Transfer sent to ID: {target_account.id} name: {target_account.name} ", f"{amount}$"
+        return f"Transfer sent to: {target_account.name} \n ID number: {target_account.id} \n {amount}$ has been sent"
             
         
          
@@ -208,9 +208,9 @@ class Bank():
             
               
         
-    def creatAccount(self):
-        name = input("What your name: ")
-        pin = input("Choose your PIN: ")
+    def creatAccount(self, name, pin):
+        # name = input("What your name: ")
+        # pin = input("Choose your PIN: ")
         for i in my_bank.accounts:
             self.nextCount_id=i.id
         
@@ -222,6 +222,7 @@ class Bank():
         self.accounts.append(new_Account)
         save_data(self)#save new account
         print("Account created successfully!")
+        return "Account created successfully!"
     
     
     
