@@ -7,13 +7,15 @@ class Bank:
 
 
 class Account:
-    def init(self, id, name ,pin ,balance, is_activated, transaction ):
+    def __init__(self,id,name,pin,balance):
+        
         self.id = id
         self.name=name
         self.balance=balance
         self.pin = pin
-        self.is_activated = is_activated
-        self.transaction = transaction
+        self.is_activated = True
+        self.transaction = [  ]
+        
 
     def auth(self):
         id_client = (input("Enter your account ID: "))   # קבלת מזהה מהמשתמש
@@ -21,17 +23,34 @@ class Account:
 
         if id_client == self.id and pin_client == self.pin:
             self.is_activated = True
+            self.id = id_client
+
+            
             print("correct")
-            return self.id
+            return self.is_activated
 
         else:
             print("is Incorrect")
             self.is_activated = False
+            
+            
+    def balance(self):
+        print(self.balance) 
+               
+            
+    
 
+ 
+
+    def balance(user_balance):
+     print(f"Your Balance now is {user_balance}")
 
 
 acount1 =Account("123","niv", "123", 500, False, [])
+acount2 =Account("123","yoni", "123", 1000, False, [])
 
+
+acount1.auth()
 
 
 
