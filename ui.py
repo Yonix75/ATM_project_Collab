@@ -3,6 +3,7 @@ from models import *
 
 
 
+
 class ATMApp():
     def __init__(self,root,Bank):
         self.root = root
@@ -42,18 +43,55 @@ class ATMApp():
             
     
     def get_withdraw(self):
-        Account.withdraw()
+        try:
+            amount = int(self.entry_amount.get())
+        except ValueError:
+            self.label_amount.config(text="Please enter a valid number")
+            return None
+        
+        result = self.current_account.withdraw(amount)
+        self.label_amount.config(text=result)
+        
+        
+    def operationComplet(self):
+        self.clear_screen()
+        self.title_label = tk.Label(self.root,text="Operation Complet", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label.pack(pady=50)#vertical title
+        self.label_account = tk.Label(self.root, text="")
+        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button.pack(pady=20)
    
     def get_Transaction(self):
-       Account.transfereTo()
+      try:
+        target = int(self.entry_ID.get())
+        amount = float(self.entry_amount.get())
+      except ValueError:
+        self.label_amount.config(text="Please enter a valid number")
+        self.label_target.config(text="Please enter a valid id")
+        return None
+
+      result = self.current_account.transfereTo(target, amount)
+      self.label_account.config(text=result)
+      #self.operationComplet()
     
-    def get_history(self):
-        pass
+    def get_Balance(self):
+      self.show_balance_screen()
+      balance = self.current_account.balanceaccount()
+      self.label_account.config(text=balance)
+      
 
     def show_login_screen(self):
         self.clear_screen()
         
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
+        
+        self.title_label = tk.Label(self.root,text="Welcome", font=("Helvetica", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=15)#vertical title
 
         #=======================================================entry your number id
@@ -90,16 +128,20 @@ class ATMApp():
         self.deposit_button.place(x=40, y=150)
         
         # כפתור משיכה 
-        self.withdraw_button = tk.Button(self.root, text="Withdraw", width=15,command=self.get_withdraw)
+        self.withdraw_button = tk.Button(self.root, text="Withdraw", width=15,command=self.show_withdraw_screen)
         self.withdraw_button.place(x=40, y=250)
         
         # כפתור הצג עובר ושב
-        self.balance_button = tk.Button(self.root, text="Balance", width=15,)
+        self.balance_button = tk.Button(self.root, text="Balance", width=15,command=self.get_Balance)
         self.balance_button.place(x=560, y=150)
        
         # כפתור העברה
-        self.transfer_button = tk.Button(self.root, text="Transfer", width=15,command=self.get_Transaction)
+        self.transfer_button = tk.Button(self.root, text="Transfer", width=15,command=self.show_Transfer_to)
         self.transfer_button.place(x=560, y=250)
+        
+        # כפתור יציאה 
+        self.back_button = tk.Button(self.root, text="Log out", width=15,command=self.show_login_screen)
+        self.back_button.place(x=300, y=400)
 
     def show_deposit_screen(self):
         self.clear_screen()
@@ -117,24 +159,94 @@ class ATMApp():
         self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
 
+    def show_withdraw_screen(self):
+        self.clear_screen()
+        
+        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label.pack(pady=50)#vertical title
+        
+        self.label_amount = tk.Label(self.root, text="Enter the amount you would like to withdraw",bd=0,highlightthickness=0,)
+        self.label_amount.pack(pady=30)
+        
+        self.entry_amount = tk.Entry(self.root, width=25)#entry input
+        self.entry_amount.pack(pady=5)
+        self.enter_button = tk.Button(self.root, text="Enter", width=15,command=self.get_withdraw)
+        self.enter_button.pack(pady=10)
+        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button.pack(pady=20)
+
+    def show_balance_screen(self):
+        self.clear_screen()
+         
+        self.label_account = tk.Label(self.root, text="")
+        self.label_account.pack()
+        self.title_label = tk.Label(self.root,text="SOLD", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label.pack(pady=50)#vertical title
+        self.label_account = tk.Label(self.root, text="")
+        self.label_account.pack()
+        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button.pack(pady=20)
+    
+    
+    def show_Transfer_to(self):
+        self.clear_screen()
+        
+        self.label_target = tk.Label(self.root, text="ID target",bd=0,highlightthickness=0)
+        self.label_target.pack()
+        self.entry_ID = tk.Entry(self.root, width=25)#entry input
+        #ATMApp.get_entery_valu
+        self.entry_ID.pack(pady=5)
+
+        #=======================================================entry your number pin
+        self.label_account = tk.Label(self.root, text="Amount")
+        self.label_account.pack()
+        self.entry_amount = tk.Entry(self.root, width=25)#entry input 
+        self.entry_amount.pack(pady=5)
 
 
+        self.login_button = tk.Button(self.root, text="Enter", width=15, command=self.get_Transaction)
+        self.login_button.pack(pady=10)
+        self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
+        self.back_button.pack(pady=20)
+     
 #creat windows
+
+
+import tkinter as tk
+
 root = tk.Tk()
-#custom windows
-root.title("ATM")
+root.title("MAZE BANK")
 root.geometry("720x480")
-#root.iconbitmap("pngwing.com.ico")
-root.config(background='#4065A4')
+root.iconbitmap("mazeBank.ico")
 
+# contour rouge seulement autour
+border_frame = tk.Frame(root, bg="red")
+border_frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-app = ATMApp(root, Bank=None)
-#app.show_menu_screen()
+main_frame = tk.Frame(border_frame, bg="white")
+main_frame.place(x=2, y=2, relwidth=1, relheight=1, width=-4, height=-4)
+
+app = ATMApp(main_frame, Bank=None)
 app.show_login_screen()
 
 
-    
+# =================================================cursor
+# cursor_image = tk.PhotoImage(file="cursor_transparent_32.png")
+# cursor_label = tk.Label(main_frame, image=cursor_image, bd=0, bg="white", highlightthickness=0)
+# cursor_label.place(x=0, y=0)
+# cursor_label.image = cursor_image
+# root.config(cursor="none")
+# def move_fake_cursor(event):
+#     x = event.x_root - root.winfo_rootx()
+#     y = event.y_root - root.winfo_rooty()
 
-#display window
+#     cursor_label.place(x=x, y=y)
+#     cursor_label.lift()
+
+# root.bind_all("<Motion>", move_fake_cursor)
+
+# def move_fake_cursor(event):
+#     cursor_label.place(x=event.x, y=event.y)
+
+# main_frame.bind("<Motion>", move_fake_cursor)
 root.mainloop()
-#my_bank.auth(entry_ID,entry_PIN)

@@ -67,20 +67,23 @@ class Account:
         print(self.transactions)
     
     
+    
+    
+    
                 
     
-    def transfereTo():
+    def transfereTo(self,target,amount):
         
-        user_account = my_bank.auth()
-        if user_account:
-            myName = user_account.name
-            myId= user_account.id
-            target_account_id = int(input("Enter the ID of the account you would like to transfer to: ").strip())
-            amount = int(input("Enter the amount you would like to tranfer: ").strip())
+        #user_account = my_bank.auth()
+        if self.is_activated:
+            #myName = user_account.name
+            #myId= user_account.id
+            #target_account_id = int(input("Enter the ID of the account you would like to transfer to: ").strip())
+            #amount = int(input("Enter the amount you would like to tranfer: ").strip())
             target_account=None
             
             for i in my_bank.accounts:
-               if i.id == target_account_id:
+               if i.id == target:
                   target_account = i
                   targetname=i.name
                   targetid=i.id
@@ -98,7 +101,7 @@ class Account:
              print("Invalid amount")
              return
 
-            if amount > user_account.balance:
+            if amount > self.balance:
               print("Insufficient funds")
               return
            
@@ -111,14 +114,15 @@ class Account:
                 
         
         
-        user_account.balance -= amount
+        self.balance -= amount
         target_account.balance += amount
 
-        user_account.newTransaction(f"Transfer sent to ID: {targetid} name: {targetname} ", amount) #! אולי כדי להכניס מי העביר 
-        target_account.newTransaction(f"Transfer received to ID:{myId} name: {myName}", amount) #! כנל להכניס מי שלח את הכסף
+        self.newTransaction(f"Transfer sent to ID: {target_account.id} name: {target_account.name} ", f"{amount}") #! אולי כדי להכניס מי העביר 
+        target_account.newTransaction(f"Transfer received to ID:{self.id} name: {self.name}", amount) #! כנל להכניס מי שלח את הכסף
         save_data(my_bank)#saveeeee
         print(f"Transferred {amount} to account {target_account.name}")
-        print(f"Your new balance: {user_account.balance}")
+        print(f"Your new balance: {self.balance}")
+        return f"Transfer sent to ID: {target_account.id} name: {target_account.name} ", f"{amount}$"
             
         
          
@@ -131,36 +135,46 @@ class Account:
         if self.is_activated:
             #amount = int(input("How much money you would like to deposit: ").strip())
             if amount < 0:
-                self.label_amount.config(text="You cannot tpye negative numbers")
+                #self.label_amount.config(text="You cannot tpye negative numbers")
                 print("You cannot tpye negative numbers")
-                exit()
+                return f"You cannot tpye negative numbers"
+                
             else:
                 self.balance+=amount
-                print(f"The money has been deposited ! The new Balance in your Account is: {self.balance}₪")
+                print(f"The money has been deposited ! The new Balance in your Account is: {self.balance}$")
                 self.newTransaction("deposite",amount)
                 save_data(my_bank)
-                return f"The money has been deposited ! \n The new Balance in your Account is: {self.balance}₪"
+                return f"The money has been deposited ! \n The new Balance in your Account is: {self.balance}$"
                
-    def withdraw():
-        user_account = my_bank.auth()
+    def withdraw(self,amount):
+        #user_account = my_bank.auth()
         
-        if user_account:
-            if user_account.is_activated:
-                amount = float(input("Please type the amount you would like to withdraw: ").strip())
-                if amount > user_account.balance:
+        
+            if self.is_activated:
+                #amount = float(input("Please type the amount you would like to withdraw: ").strip())
+                if amount > self.balance:
                     print("You are poor")
+                    #self.label_amount.config(text="you do not have the funds")
+                    return f"you do not have the funds"
+                elif amount < 0:
+                    #self.label_amount.config(text="You cannot tpye negative numbers")
+                    print("You cannot tpye negative numbers")
+                    return f"You cannot tpye negative numbers"
                 else: 
-                    user_account.balance -= amount
+                    self.balance -= amount
                     
-                    print(f"your new balance is {user_account.balance}")
-                    user_account.newTransaction("withdraw",amount)
+                    print(f"your new balance is {self.balance}")
+                    
+                    self.newTransaction("withdraw",amount)
                     save_data(my_bank)
+                    return f"The money has been deposited ! \n The new Balance in your Account is: {self.balance}₪"
             else:
                 print("Wrong PIN, goodbye")
                 exit() 
                       
     def balanceaccount(self):
         print(self.balance)
+        return f"{self.balance}$"
         
          
          
@@ -260,11 +274,9 @@ except FileNotFoundError:
 
 
 
-if __name__ == "_main_":
+if __name__ == "main":
     
     my_bank.show_all_accounts()
     Account.withdraw()
     my_bank.show_all_accounts()
     Account.transfereTo()
-    
-    
