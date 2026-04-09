@@ -106,10 +106,10 @@ class ATMApp():
       #self.operationComplet()
     
     def get_History(self):
-      self.show_history_screen()
+      self.show_History_screen()  
       balance = self.current_account.show_Transaction()
       self.label_account.config(text=balance)
-      
+     
       
     # פונקציות מנהל 
       
@@ -121,11 +121,11 @@ class ATMApp():
         except ValueError:
             self.done_label.config(text="Invalid input, Please try again")
             return None
-        
+        self.enter_button.config(state="disabled")
         txt = my_bank.creatAccount(name, pin)
         self.done_label.config(text=txt)
         
-        # חסימה ושחרור
+     # חסימה ושחרור
     def get_blook(self):
         try:
             account_id = int(self.entry_id_to_change.get())
@@ -147,7 +147,6 @@ class ATMApp():
         
         result = self.current_account.change_pin(current_pin, new_pin, confirm_pin)
         self.done_label.config(text=result)
-        
       
       
     # פונקציות הצגת חלונות 
@@ -163,18 +162,18 @@ class ATMApp():
         logo_label.place(x=-85, y=-90)   # plus à gauche
         logo_label.image = logo_small
         
-        self.title_label = tk.Label(self.root,text="Welcome", font=("Helvetica", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label = tk.Label(self.root,text="Welcome",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=40)#vertical title
 
         #=======================================================entry your number id
-        self.label_account = tk.Label(self.root, text="ID",bd=0,highlightthickness=0)
+        self.label_account = tk.Label(self.root, text="ID",bg="white",fg="black", font=("Segoe UI Light", 14, "bold"),highlightthickness=0)
         self.label_account.pack()
         self.entry_ID = tk.Entry(self.root, width=25)#entry input
         #ATMApp.get_entery_valu
         self.entry_ID.pack(pady=10)
 
         #=======================================================entry your number pin
-        self.label_account = tk.Label(self.root, text="PIN Number")
+        self.label_account = tk.Label(self.root, text="PIN Number",bg="white",fg="black", font=("Segoe UI Light", 14, "bold"))
         self.label_account.pack()
         self.entry_PIN = tk.Entry(self.root, width=25,show="*")#entry input 
         self.entry_PIN.pack(pady=5)
@@ -191,18 +190,29 @@ class ATMApp():
     
     def show_menu_screen(self):
         self.clear_screen()
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
+        
+        
+        
+        
         balance = self.current_account.balanceaccount()
         
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0, fg="#FF0000")#title center window
+        self.title_label = tk.Label(self.root,text="ATM Machine",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.place(x=270, y=40)#vertical title
         
         # שלום לשם המשתמש
-        self.username_label = tk.Label(self.root,text=f"Hello {self.current_account.name}", font=("Arial", 13, "bold"),bd=0,highlightthickness=0)
-        self.username_label.place(x=70, y=50)
+        self.username_label = tk.Label(self.root,text=f"Hello {self.current_account.name}",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0)
+        self.username_label.place(x=70, y=55)
         
         # הצגת המאזן
-        self.blanace_label = tk.Label(self.root,text=f"Balance: {balance}", font=("Arial", 13, "bold"),bd=0,highlightthickness=0)
-        self.blanace_label.place(x=560, y=50)
+        self.blanace_label = tk.Label(self.root,text=f"Balance: {balance}",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0)
+        self.blanace_label.place(x=560, y=55)
         
         #  כפתור הפקדה
         self.deposit_button = tk.Button(self.root, text="Deposit", bg = "red",fg="#FFFFFF", width=15,command=self.show_deposit_screen)
@@ -213,7 +223,7 @@ class ATMApp():
         self.withdraw_button.place(x=40, y=250)
         
         # כפתור הצג עובר ושב
-        self.balance_button = tk.Button(self.root, text="History", bg = "red",fg="#FFFFFF", width=15,command=self.get_History)
+        self.balance_button = tk.Button(self.root, text="History", bg = "red",fg="#FFFFFF", width=15,command=self.show_History_screen)
         self.balance_button.place(x=560, y=150)
        
         # כפתור העברה
@@ -230,14 +240,23 @@ class ATMApp():
 
     def show_admin_login_screen(self):
         self.clear_screen()
+    
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
         
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        
+        self.title_label = tk.Label(self.root,text="Account Manager",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=15)#vertical title
         
-        self.login_label = tk.Label(self.root,text="Admin Login", font=("Arial", 13, "bold"),bd=0,highlightthickness=0)
+        self.login_label = tk.Label(self.root,text="Admin Login",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0)
         self.login_label.pack(pady=40)
         
-        self.entery_label = tk.Label(self.root,text="Enter your PIN", font=("Arial", 10, "bold"),bd=0,highlightthickness=0)
+        self.entery_label = tk.Label(self.root,text="Enter your PIN",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0)
         self.entery_label.pack(pady=15)
         
         self.entry_pin = tk.Entry(self.root, width=25, show="*")#entry input
@@ -255,8 +274,17 @@ class ATMApp():
     def show_admin_menu_screen(self):
         self.clear_screen()
         
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0, fg="#FF0000")#title center window
-        self.title_label.place(x=270, y=40)
+        self.clear_screen()
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
+        
+        self.title_label = tk.Label(self.root,text="Welcome, Mr. Director",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label.place(x=230, y=40)
         
         #   כפתור יצירת חשבון
         self.creat_account_button = tk.Button(self.root, text="Create new account", bg = "red", width=15,command=self.show_account_creation_screen)
@@ -270,16 +298,11 @@ class ATMApp():
         self.block_account_button = tk.Button(self.root, text="Block / Release", bg = "red", width=15, command=self.show_blook_release_screen)
         self.block_account_button.place(x=560, y=150)
        
-    
-        
-        
         # כפתור יציאה 
-        self.back_button = tk.Button(self.root, text="Log out", bg = "red", width=15,command=self.show_login_screen)
+        self.back_button = tk.Button(self.root, text="Log out", bg = "red", width=15, command=self.show_admin_login_screen)
         self.back_button.place(x=300, y=400)
 
-
-
-        #=============== מסכי משתמש
+    #=============== מסכי משתמש
         
     def show_change_pin_screen(self):
         self.clear_screen()
@@ -320,16 +343,25 @@ class ATMApp():
         self.done_label.pack(pady=10)
         
         # כפתור חזרה
-        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.place(x=300, y=400)
         
     def show_deposit_screen(self):
         self.clear_screen()
         
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.clear_screen()
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
+        
+        self.title_label = tk.Label(self.root,text="DEPOSITE",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=50)#vertical title
         
-        self.label_amount = tk.Label(self.root, text="Enter the amount you would like to deposit",bd=0,highlightthickness=0,)
+        self.label_amount = tk.Label(self.root, text="Enter the amount you would like to deposit",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0,)
         self.label_amount.pack(pady=30)
         
         self.entry_amount = tk.Entry(self.root, width=25)#entry input
@@ -342,10 +374,19 @@ class ATMApp():
     def show_withdraw_screen(self):
         self.clear_screen()
         
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.clear_screen()
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
+        
+        self.title_label = tk.Label(self.root,text="WHITHDRAW", bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=50)#vertical title
         
-        self.label_amount = tk.Label(self.root, text="Enter the amount you would like to withdraw",bd=0,highlightthickness=0,)
+        self.label_amount = tk.Label(self.root, text="Enter the amount you would like to withdraw",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0,)
         self.label_amount.pack(pady=30)
         
         self.entry_amount = tk.Entry(self.root, width=25)#entry input
@@ -355,7 +396,8 @@ class ATMApp():
         self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
 
-    def show_history_screen(self):
+    def show_History_screen(self):
+        
         self.clear_screen()
         
         canvas = tk.Canvas(self.root)
@@ -372,26 +414,44 @@ class ATMApp():
         
         self.label_account = tk.Label(scrollable_frame, text="")
         self.label_account.pack()
-        self.title_label = tk.Label(scrollable_frame,text="SOLD", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
-        self.title_label.pack(pady=50)#vertical title
-        self.label_account = tk.Label(scrollable_frame, text="")
-        self.label_account.pack()
+        self.title_label = tk.Label(scrollable_frame, text="History:", bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0 )#title center window
+        self.title_label.pack(pady=15, anchor="w")
+        
+        
+        for transaction in self.current_account.transactions:
+            txt = f"Type: {transaction['type']} | Amount: {transaction['amount']} | Date: {transaction['date']}"
+            self.account_label = tk.Label(scrollable_frame,text=txt, font=("Arial", 13),bd=0,highlightthickness=0)#title center window
+            self.account_label.pack(pady=15)
+            
         self.back_button = tk.Button(scrollable_frame, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
     
     
+    
     def show_Transfer_screen(self):
         self.clear_screen()
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        
+        self.clear_screen()
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
+        
+        
+        
+        self.title_label = tk.Label(self.root,text="TRANSFERE", bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=50)#vertical title
-        self.label_target = tk.Label(self.root, text="Targted account ID",bd=0,highlightthickness=0)
+        self.label_target = tk.Label(self.root, text="Targted account ID",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0)
         self.label_target.pack()
         self.entry_ID = tk.Entry(self.root, width=25)#entry input
         #ATMApp.get_entery_valu
         self.entry_ID.pack(pady=5)
 
         #=======================================================entry your number pin
-        self.label_account = tk.Label(self.root, text="Amount")
+        self.label_account = tk.Label(self.root, text="Amount",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"))
         self.label_account.pack()
         self.entry_amount = tk.Entry(self.root, width=25)#entry input 
         self.entry_amount.pack(pady=5)
@@ -405,11 +465,23 @@ class ATMApp():
      
     def show_account_creation_screen(self):
         self.clear_screen()
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        
+        self.clear_screen()
+        # logo plus petit
+        logo_image = tk.PhotoImage(file="2.png")
+        logo_small = logo_image.subsample(4, 4)
+
+        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)   # plus à gauche
+        logo_label.image = logo_small
+        
+        
+        
+        self.title_label = tk.Label(self.root,text="ACCOUNT CREATION",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.place(x=270, y=40)
         
         # לייבל שם 
-        self.name_label = tk.Label(self.root,text="Enter you name: ", font=("Arial", 13, ),bd=0,highlightthickness=0)
+        self.name_label = tk.Label(self.root,text="Enter you name: ", bg="white",fg="black", font=("Segoe UI Light", 10, "bold"),bd=0,highlightthickness=0)
         self.name_label.place(x=150, y=150)
         
         # אנטרי של שם
@@ -417,7 +489,7 @@ class ATMApp():
         self.entry_nameacc.place(x=130, y=190)
         
         # לייבל של סיסמא
-        self.pin_label = tk.Label(self.root,text="Enter your PIN", font=("Arial", 13, ),bd=0,highlightthickness=0)
+        self.pin_label = tk.Label(self.root,text="Enter your PIN", bg="white",fg="black", font=("Segoe UI Light", 10, "bold"),bd=0,highlightthickness=0)
         self.pin_label.place(x=450, y=150)
         
         # אנטרי של סיסמא
@@ -425,12 +497,13 @@ class ATMApp():
         self.entry_pinacc.place(x=430, y=190)
         
         # כפתור אנטר
-        self.enter_button = tk.Button(self.root, text="Creat Account!", bg = "red", width=15, command=self.get_create_acccount)
+        self.enter_button = tk.Button(self.root, text="Creat Success!", bg = "red", width=15, command=self.get_create_acccount)
         self.enter_button.place(x=300, y=270)
         
         # לייבל אישור ביצוע 
-        self.done_label = tk.Label(self.root, font=("Arial", 13, ),bd=0,highlightthickness=0)
+        self.done_label = tk.Label(self.root, font=("Segoe UI Light", 13, ),bd=0,highlightthickness=0)
         self.done_label.place(x=250, y=320)
+        
         
         
         # כפתור חזרה
@@ -441,6 +514,7 @@ class ATMApp():
     def show_all_my_accounts_screen(self):
        
         self.clear_screen()
+        
         canvas = tk.Canvas(self.root)
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
@@ -453,7 +527,7 @@ class ATMApp():
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
          
-        self.title_label = tk.Label(scrollable_frame, text="Bank Accounts:", font=("Arial", 15, "bold"),bd=0,highlightthickness=0, )#title center window
+        self.title_label = tk.Label(scrollable_frame, text="Bank Accounts:",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0, )#title center window
         self.title_label.pack(pady=15, anchor="w")
         
         for account in my_bank.accounts:
@@ -461,36 +535,35 @@ class ATMApp():
             self.account_label = tk.Label(scrollable_frame,text=txt, font=("Arial", 13),bd=0,highlightthickness=0)#title center window
             self.account_label.pack(pady=15)
             
-        # כפתור חזרה    
-        self.back_button = tk.Button(scrollable_frame, text="Back", width=15, command=self.show_admin_menu_screen)
-        self.back_button.pack()
+        self.back_button = tk.Button(scrollable_frame, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
+        self.back_button.pack(pady=20)    
+        
 
     def show_blook_release_screen(self):
-        
-        self.clear_screen()
-        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
-        self.title_label.place(x=270, y=40)
-        
-        # לייבל של מזהה
-        self.id_to_blook_label = tk.Label(self.root,text="Enter Account ID you would lik to blook/release", font=("Arial", 13, ),bd=0,highlightthickness=0)
-        self.id_to_blook_label.place(x=190, y=150)
-        
-        # אנטרי של מזהה
-        self.entry_id_to_change = tk.Entry(self.root, width=25)#entry input
-        self.entry_id_to_change.place(x=280, y=190)
-        
-        # כפתור אנטר
-        self.enter_button = tk.Button(self.root, text="Enter", bg = "red", width=15, command=self.get_blook)
-        self.enter_button.place(x=300, y=220)
-        
-        # לייבל אישור ביצוע 
-        self.done_label = tk.Label(self.root, font=("Arial", 13, ),bd=0,highlightthickness=0)
-        self.done_label.place(x=250, y=320)
-        
-        # כפתור חזרה
-        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
-        self.back_button.place(x=300, y=400)
-        
+            
+            self.clear_screen()
+            self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+            self.title_label.place(x=270, y=40)
+            
+            # לייבל של מזהה
+            self.id_to_blook_label = tk.Label(self.root,text="Enter Account ID you would lik to blook/release", font=("Arial", 13, ),bd=0,highlightthickness=0)
+            self.id_to_blook_label.place(x=190, y=150)
+            
+            # אנטרי של מזהה
+            self.entry_id_to_change = tk.Entry(self.root, width=25)#entry input
+            self.entry_id_to_change.place(x=280, y=190)
+            
+            # כפתור אנטר
+            self.enter_button = tk.Button(self.root, text="Enter", bg = "red", width=15, command=self.get_blook)
+            self.enter_button.place(x=300, y=220)
+            
+            # לייבל אישור ביצוע 
+            self.done_label = tk.Label(self.root, font=("Arial", 13, ),bd=0,highlightthickness=0)
+            self.done_label.place(x=250, y=320)
+            
+            # כפתור חזרה
+            self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
+            self.back_button.place(x=300, y=400)
         
 
 
@@ -500,14 +573,14 @@ class ATMApp():
 root = tk.Tk()
 root.title("MAZE BANK")
 root.geometry("720x480")
-root.iconbitmap("mazeBank.ico")
+#root.iconbitmap("mazeBank.ico")
 
 # contour rouge seulement autour
 border_frame = tk.Frame(root, bg="red")
 border_frame.place(x=0, y=0, relwidth=1, relheight=1)
 
 main_frame = tk.Frame(border_frame, bg="white")
-main_frame.place(x=2, y=2, relwidth=1, relheight=1, width=-4, height=-4)
+main_frame.place(x=8, y=8, relwidth=1, relheight=1, width=-16, height=-16)
 
 app = ATMApp(main_frame, Bank=None)
 app.show_login_screen()
