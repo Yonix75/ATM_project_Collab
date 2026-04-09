@@ -172,7 +172,7 @@ class Account:
                     
                     self.newTransaction("withdraw",amount)
                     save_data(my_bank)
-                    return f"The money has been deposited ! \n The new Balance in your Account is: {self.balance}₪"
+                    return f"The money has been deposited ! \n The new Balance in your Account is: {self.balance}$"
             else:
                 print("Wrong PIN, goodbye")
                 exit() 
@@ -180,6 +180,23 @@ class Account:
     def balanceaccount(self):
         print(self.balance)
         return f"{self.balance}$"
+    
+    def change_pin(self, current_pin, new_pin, confirm_pin):
+      
+        if current_pin != self.pin:
+            return "Current PIN is incorrect"
+
+        if new_pin != confirm_pin:
+            return "New PIN and confirmation do not match"
+
+       
+        if new_pin == self.pin:
+            return "New PIN must be different from old PIN"
+
+        self.pin = new_pin
+        save_data(my_bank)
+
+        return "PIN changed successfully"
         
          
          
@@ -268,6 +285,23 @@ class Bank():
     
     def directorLogin(self):
         self.show_all_accounts()
+    
+    def blook_release(self, account_id):
+        for account in self.accounts:
+            if account.id == account_id:
+            
+                if account.is_activated:
+                    account.is_activated = False
+                    save_data(self)
+                    return f"Account {account_id} is now BLOCKED"
+            
+                else:
+                    account.is_activated = True
+                    save_data(self)
+                    return f"Account {account_id} is now ACTIVE"
+    
+        return "Account not found"
+        
         
         
           
