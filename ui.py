@@ -285,14 +285,26 @@ class ATMApp():
 
     def show_balance_screen(self):
         self.clear_screen()
-         
-        self.label_account = tk.Label(self.root, text="")
+        
+        canvas = tk.Canvas(self.root)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        scrollbar = tk.Scrollbar(self.root, orient=tk.VERTICAL, command=canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, )
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollable_frame = tk.Frame(canvas)
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
+        self.label_account = tk.Label(scrollable_frame, text="")
         self.label_account.pack()
-        self.title_label = tk.Label(self.root,text="SOLD", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label = tk.Label(scrollable_frame,text="SOLD", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=50)#vertical title
-        self.label_account = tk.Label(self.root, text="")
+        self.label_account = tk.Label(scrollable_frame, text="")
         self.label_account.pack()
-        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
+        self.back_button = tk.Button(scrollable_frame, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
     
     
@@ -358,10 +370,10 @@ class ATMApp():
     def show_all_my_accounts_screen(self):
        
         self.clear_screen()
-        canvas = tk.Canvas(root)
+        canvas = tk.Canvas(self.root)
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
-        scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL, command=canvas.yview)
+        scrollbar = tk.Scrollbar(self.root, orient=tk.VERTICAL, command=canvas.yview)
         scrollbar.pack(side=tk.RIGHT, )
 
         canvas.configure(yscrollcommand=scrollbar.set)
@@ -379,8 +391,8 @@ class ATMApp():
             self.account_label.pack(pady=15)
             
         # כפתור חזרה    
-        # self.back_button = tk.Button(self.root, text="Back", width=15, command=self.show_admin_menu_screen)
-        # self.back_button.pack()
+        self.back_button = tk.Button(scrollable_frame, text="Back", width=15, command=self.show_admin_menu_screen)
+        self.back_button.pack()
 
 
 
