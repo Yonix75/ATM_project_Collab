@@ -106,7 +106,7 @@ class ATMApp():
       #self.operationComplet()
     
     def get_History(self):
-      self.show_balance_screen()
+      self.show_history_screen()
       balance = self.current_account.show_Transaction()
       self.label_account.config(text=balance)
       
@@ -125,6 +125,28 @@ class ATMApp():
         txt = my_bank.creatAccount(name, pin)
         self.done_label.config(text=txt)
         
+        # חסימה ושחרור
+    def get_blook(self):
+        try:
+            account_id = int(self.entry_id_to_change.get())
+        except ValueError:
+            self.done_label.config(text="Invalid ID")
+            return None
+        
+        result = my_bank.blook_release(account_id)
+        self.done_label.config(text=result)
+        
+    def get_change_pin(self):
+        try:
+            current_pin = (self.entry_current.get())
+            new_pin = (self.entry_new.get())
+            confirm_pin = (self.entry_confirm.get())
+        except ValueError:
+            self.done_label.config(text="pleas enter inviled numbers")
+            return None
+        
+        result = self.current_account.change_pin(current_pin, new_pin, confirm_pin)
+        self.done_label.config(text=result)
         
       
       
@@ -198,6 +220,10 @@ class ATMApp():
         self.transfer_button = tk.Button(self.root, text="Transfer", bg = "red",fg="#FFFFFF", width=15,command=self.show_Transfer_screen)
         self.transfer_button.place(x=560, y=250)
         
+        # כפתור שינוי סיסמא
+        self.change_button = tk.Button(self.root, text="Change PIN", bg = "red",fg="#FFFFFF", width=15, command=self.show_change_pin_screen)
+        self.change_button.place(x=300, y=350)
+        
         # כפתור יציאה 
         self.back_button = tk.Button(self.root, text="Log out", bg = "red", width=15,command=self.show_login_screen)
         self.back_button.place(x=300, y=400)
@@ -241,7 +267,7 @@ class ATMApp():
         self.show_accounts_button.place(x=40, y=250)
         
         # כפתור הצג חסימה שחרור 
-        self.block_account_button = tk.Button(self.root, text="Block / Release", bg = "red", width=15)
+        self.block_account_button = tk.Button(self.root, text="Block / Release", bg = "red", width=15, command=self.show_blook_release_screen)
         self.block_account_button.place(x=560, y=150)
        
     
@@ -251,6 +277,52 @@ class ATMApp():
         self.back_button = tk.Button(self.root, text="Log out", bg = "red", width=15,command=self.show_login_screen)
         self.back_button.place(x=300, y=400)
 
+
+
+        #=============== מסכי משתמש
+        
+    def show_change_pin_screen(self):
+        self.clear_screen()
+        
+        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label.pack(pady=50)#vertical title
+        
+        # לייבל נוכחי
+        self.label_current = tk.Label(self.root, text="Enter your current PIN: ",bd=0,highlightthickness=0,)
+        self.label_current.pack(pady=5)
+        
+        # אנטרי נוכחי
+        self.entry_current = tk.Entry(self.root, width=25)#entry input
+        self.entry_current.pack()
+        
+        # לייבל חדשה
+        self.label_new = tk.Label(self.root, text="Enter your new PIN: ",bd=0,highlightthickness=0,)
+        self.label_new.pack(pady=5)
+        
+        # אנטרי חדשה
+        self.entry_new = tk.Entry(self.root, width=25)#entry input
+        self.entry_new.pack()
+        
+        # לייבל אישור
+        self.label_confirm = tk.Label(self.root, text="Confirm your new PIN: ",bd=0,highlightthickness=0,)
+        self.label_confirm.pack(pady=5)
+        
+        # אנטרי אישור
+        self.entry_confirm = tk.Entry(self.root, width=25)#entry input
+        self.entry_confirm.pack()
+        
+        # כפתור אנטר
+        self.enter_button = tk.Button(self.root, text="Change PIN", bg = "red", width=15,command=self.get_change_pin)
+        self.enter_button.pack(pady=10)
+        
+        # לייבל אישור ביצוע 
+        self.done_label = tk.Label(self.root, font=("Arial", 13, ),bd=0,highlightthickness=0)
+        self.done_label.pack(pady=10)
+        
+        # כפתור חזרה
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
+        self.back_button.place(x=300, y=400)
+        
     def show_deposit_screen(self):
         self.clear_screen()
         
@@ -283,7 +355,7 @@ class ATMApp():
         self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_menu_screen)
         self.back_button.pack(pady=20)
 
-    def show_balance_screen(self):
+    def show_history_screen(self):
         self.clear_screen()
         
         canvas = tk.Canvas(self.root)
@@ -361,7 +433,6 @@ class ATMApp():
         self.done_label.place(x=250, y=320)
         
         
-        
         # כפתור חזרה
         self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
         self.back_button.place(x=300, y=400)
@@ -394,7 +465,33 @@ class ATMApp():
         self.back_button = tk.Button(scrollable_frame, text="Back", width=15, command=self.show_admin_menu_screen)
         self.back_button.pack()
 
-
+    def show_blook_release_screen(self):
+        
+        self.clear_screen()
+        self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
+        self.title_label.place(x=270, y=40)
+        
+        # לייבל של מזהה
+        self.id_to_blook_label = tk.Label(self.root,text="Enter Account ID you would lik to blook/release", font=("Arial", 13, ),bd=0,highlightthickness=0)
+        self.id_to_blook_label.place(x=190, y=150)
+        
+        # אנטרי של מזהה
+        self.entry_id_to_change = tk.Entry(self.root, width=25)#entry input
+        self.entry_id_to_change.place(x=280, y=190)
+        
+        # כפתור אנטר
+        self.enter_button = tk.Button(self.root, text="Enter", bg = "red", width=15, command=self.get_blook)
+        self.enter_button.place(x=300, y=220)
+        
+        # לייבל אישור ביצוע 
+        self.done_label = tk.Label(self.root, font=("Arial", 13, ),bd=0,highlightthickness=0)
+        self.done_label.place(x=250, y=320)
+        
+        # כפתור חזרה
+        self.back_button = tk.Button(self.root, text="Back", bg = "red", width=15,command=self.show_admin_menu_screen)
+        self.back_button.place(x=300, y=400)
+        
+        
 
 
 
