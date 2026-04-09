@@ -69,8 +69,7 @@ class Account:
           result += f"Type: {transaction['type']} | Amount: {transaction['amount']} | Date: {transaction['date']}\n"
           
         return result
-           # print(self.transactions)
-            # return f"{self.transactions}\n"
+           
     
     
     
@@ -79,12 +78,9 @@ class Account:
     
     def transfereTo(self,target,amount):
         
-        #user_account = my_bank.auth()
+     
         if self.is_activated:
-            #myName = user_account.name
-            #myId= user_account.id
-            #target_account_id = int(input("Enter the ID of the account you would like to transfer to: ").strip())
-            #amount = int(input("Enter the amount you would like to tranfer: ").strip())
+           
             target_account=None
             
             for i in my_bank.accounts:
@@ -110,9 +106,7 @@ class Account:
               print("Insufficient funds")
               return
            
-                    #target_account = i 
-                    #targetname=i.name
-                   # targetid=i.id
+                
         else:
             return print("account dont exist")            
             
@@ -135,12 +129,12 @@ class Account:
             
     def deposit(self,amount):
         
-        #self.is_activated
+     
         
         if self.is_activated:
-            #amount = int(input("How much money you would like to deposit: ").strip())
+       
             if amount < 0:
-                #self.label_amount.config(text="You cannot tpye negative numbers")
+            
                 print("You cannot tpye negative numbers")
                 return f"You cannot tpye negative numbers"
                 
@@ -152,17 +146,17 @@ class Account:
                 return f"The money has been deposited ! \n The new Balance in your Account is: {self.balance}$"
                
     def withdraw(self,amount):
-        #user_account = my_bank.auth()
+  
         
         
             if self.is_activated:
-                #amount = float(input("Please type the amount you would like to withdraw: ").strip())
+              
                 if amount > self.balance:
                     print("You are poor")
-                    #self.label_amount.config(text="you do not have the funds")
+                 
                     return f"you do not have the funds"
                 elif amount < 0:
-                    #self.label_amount.config(text="You cannot tpye negative numbers")
+
                     print("You cannot tpye negative numbers")
                     return f"You cannot tpye negative numbers"
                 else: 
@@ -209,30 +203,17 @@ class Bank():
     def is_open(self):
        
         return self.is_activated
-        
-    def auth(self,user_id,pin):
-       # user_id = int(input("Enter your account ID: ").strip())
-        #pin = (input("Enter your PIN: ").strip())
-        
-        for account in self.accounts:
-            if user_id == account.id and pin == account.pin:
-                if user_id!=1000:
-                  print(f"Welcome {account.name}")
-                  self.is_activated = True
-                  return account
-                else:
-                  print(f"Welcome {account.name}") 
-                  return my_bank.directorLogin()
-                     
-            
-        print("worng ID or PIN")
     
+    def auth(self, user_id, pin):
+       for account in self.accounts:
+          if user_id == account.id and pin == account.pin:
+            return account
+       return None
             
               
         
     def creatAccount(self, name, pin):
-        # name = input("What your name: ")
-        # pin = input("Choose your PIN: ")
+      
         for i in my_bank.accounts:
             self.nextCount_id=i.id
         

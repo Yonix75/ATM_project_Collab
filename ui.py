@@ -1,16 +1,31 @@
 import tkinter as tk
 from models import *
-
+import os
 
 
 
 class ATMApp():
     def __init__(self,root,Bank):
-        self.root = root
-        self.Bank = Bank
-        self.current_account= None
+     self.root = root
+     self.Bank = Bank
+     self.current_account= None
+
+     base_dir = os.path.dirname(os.path.abspath(__file__))
+     self.icon_path = os.path.join(base_dir, "mazeBank.ico")
+     self.logo_path = os.path.join(base_dir, "2.png")
+     self.logo_small = None
         
     # פונקציות יו אי 
+    
+    def show_logo(self):
+       if os.path.exists(self.logo_path):
+        self.logo_small = tk.PhotoImage(file=self.logo_path).subsample(4, 4)
+        logo_label = tk.Label(self.root, image=self.logo_small, bd=0, bg="white", highlightthickness=0)
+        logo_label.place(x=-85, y=-90)
+        logo_label.image = self.logo_small
+       else:
+        print("Logo not found:", self.logo_path)
+    
     
     def clear_screen(self):#she is destroy all of widgets in window (Buton , label , text)
       for widget in self.root.winfo_children():
@@ -35,17 +50,22 @@ class ATMApp():
             new_window.geometry("250x150")  
             self.label = tk.Label(new_window, text="Please enter a valid numbers",font=("Arial", 10, "bold"),bd=0,highlightthickness=0)
             self.label.pack(pady=50)
-            #self.title_label.config(text="Please enter a valid number")
             return None
         
-        self.current_account=Bank.auth(my_bank,id_valu,pin_valu)
-           
-        if self.current_account:
-                print( f"id: {id_valu} pin: {pin_valu}")    
-                self.show_menu_screen()   
-        else:
-             self.title_label.config(text="Worng ID or PIN")
         
+    
+
+        self.current_account = my_bank.auth(id_valu, pin_valu)
+
+        if self.current_account is None:
+             self.title_label.config(text="Wrong ID or PIN")
+        elif self.current_account.is_activated:
+            print(f"id: {id_valu} pin: {pin_valu}")
+            self.show_menu_screen()
+        else:
+            self.title_label.config(text="ID Blocked")
+
+    
     def admin_login(self):
         try:
             admin_pin = (self.entry_pin.get())
@@ -84,13 +104,7 @@ class ATMApp():
         self.label_amount.config(text=result)
         
         
-    # def operationComplet(self):
-    #     self.clear_screen()
-    #     self.title_label = tk.Label(self.root,text="Operation Complet", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
-    #     self.title_label.pack(pady=50)#vertical title
-    #     self.label_account = tk.Label(self.root, text="")
-    #     self.back_button = tk.Button(self.root, text="Back", width=15,command=self.show_menu_screen)
-    #     self.back_button.pack(pady=20)
+  
    
     def get_Transaction(self):
       try:
@@ -155,12 +169,7 @@ class ATMApp():
         self.clear_screen()
         
         # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         self.title_label = tk.Label(self.root,text="Welcome",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=40)#vertical title
@@ -191,12 +200,7 @@ class ATMApp():
     def show_menu_screen(self):
         self.clear_screen()
         # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         
         
@@ -242,12 +246,7 @@ class ATMApp():
         self.clear_screen()
     
         # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         
         self.title_label = tk.Label(self.root,text="Account Manager",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
@@ -276,12 +275,7 @@ class ATMApp():
         
         self.clear_screen()
         # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         self.title_label = tk.Label(self.root,text="Welcome, Mr. Director",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.place(x=230, y=40)
@@ -307,6 +301,7 @@ class ATMApp():
     def show_change_pin_screen(self):
         self.clear_screen()
         
+        self.show_logo()
         self.title_label = tk.Label(self.root,text="ATM Machine", font=("Arial", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=50)#vertical title
         
@@ -349,14 +344,7 @@ class ATMApp():
     def show_deposit_screen(self):
         self.clear_screen()
         
-        self.clear_screen()
-        # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         self.title_label = tk.Label(self.root,text="DEPOSITE",bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=50)#vertical title
@@ -374,14 +362,7 @@ class ATMApp():
     def show_withdraw_screen(self):
         self.clear_screen()
         
-        self.clear_screen()
-        # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         self.title_label = tk.Label(self.root,text="WHITHDRAW", bg="red",fg="white", font=("Segoe UI Light", 20, "bold"),bd=0,highlightthickness=0)#title center window
         self.title_label.pack(pady=50)#vertical title
@@ -431,14 +412,7 @@ class ATMApp():
     def show_Transfer_screen(self):
         self.clear_screen()
         
-        self.clear_screen()
-        # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         
         
@@ -447,7 +421,7 @@ class ATMApp():
         self.label_target = tk.Label(self.root, text="Targted account ID",bg="white",fg="black", font=("Segoe UI Light", 12, "bold"),bd=0,highlightthickness=0)
         self.label_target.pack()
         self.entry_ID = tk.Entry(self.root, width=25)#entry input
-        #ATMApp.get_entery_valu
+      
         self.entry_ID.pack(pady=5)
 
         #=======================================================entry your number pin
@@ -466,14 +440,7 @@ class ATMApp():
     def show_account_creation_screen(self):
         self.clear_screen()
         
-        self.clear_screen()
-        # logo plus petit
-        logo_image = tk.PhotoImage(file="2.png")
-        logo_small = logo_image.subsample(4, 4)
-
-        logo_label = tk.Label(main_frame, image=logo_small, bd=0, bg="white", highlightthickness=0)
-        logo_label.place(x=-85, y=-90)   # plus à gauche
-        logo_label.image = logo_small
+        self.show_logo()
         
         
         
@@ -497,7 +464,7 @@ class ATMApp():
         self.entry_pinacc.place(x=430, y=190)
         
         # כפתור אנטר
-        self.enter_button = tk.Button(self.root, text="Creat Success!", bg = "red", width=15, command=self.get_create_acccount)
+        self.enter_button = tk.Button(self.root, text="Enter", bg = "red", width=15, command=self.get_create_acccount)
         self.enter_button.place(x=300, y=270)
         
         # לייבל אישור ביצוע 
@@ -570,12 +537,22 @@ class ATMApp():
 
 
 
+
+
+
+
 root = tk.Tk()
 root.title("MAZE BANK")
 root.geometry("720x480")
-#root.iconbitmap("mazeBank.ico")
 
-# contour rouge seulement autour
+base_dir = os.path.dirname(os.path.abspath(__file__))
+icon_path = os.path.join(base_dir, "mazeBank.ico")
+
+if os.path.exists(icon_path):
+    root.iconbitmap(icon_path)
+else:
+    print("Icon not found:", icon_path)
+
 border_frame = tk.Frame(root, bg="red")
 border_frame.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -605,4 +582,3 @@ app.show_login_screen()
 #     cursor_label.place(x=event.x, y=event.y)
 
 # main_frame.bind("<Motion>", move_fake_cursor)
-root.mainloop()
